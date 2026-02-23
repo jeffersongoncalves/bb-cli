@@ -7,8 +7,7 @@
         "vendor"
     ],
     "files": [
-        "composer.json",
-        "composer.lock"
+        "composer.json"
     ],
     "exclude-composer-files": false,
     "exclude-dev-files": false,
@@ -17,8 +16,5 @@
         "KevinGH\\Box\\Compactor\\Php",
         "KevinGH\\Box\\Compactor\\Json"
     ],
-    "force-autodiscovery": true,
-    "composer-install": true,
-    "composer-require-dev": true,
-    "check-requirements": true
+    "force-autodiscovery": true
 }
