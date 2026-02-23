@@ -1,0 +1,13 @@
+parameters:
+    level: 6
+    paths:
+        - app
+        - tests
+    ignoreErrors:
+        -
+            identifier: property.notFound
+            path: tests/*
+        -
+            identifier: method.notFound
+        -
+            identifier: missingType.iterableValue
