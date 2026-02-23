@@ -29,7 +29,7 @@ class FilesCommand extends Command
             $rows = array_map(fn (array $file) => [
                 $file['status'] ?? '',
                 $file['new']['path'] ?? $file['old']['path'] ?? '',
-                ($file['lines_added'] ?? 0) . ' / ' . ($file['lines_removed'] ?? 0),
+                ($file['lines_added'] ?? 0).' / '.($file['lines_removed'] ?? 0),
             ], $files);
 
             $this->renderTable(['Status', 'File', 'Added / Removed'], $rows);

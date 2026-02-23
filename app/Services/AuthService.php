@@ -11,10 +11,10 @@ class AuthService
     public function __construct()
     {
         $home = PHP_OS_FAMILY === 'Windows'
-            ? ($_SERVER['USERPROFILE'] ?? $_SERVER['HOMEDRIVE'] . $_SERVER['HOMEPATH'])
+            ? ($_SERVER['USERPROFILE'] ?? $_SERVER['HOMEDRIVE'].$_SERVER['HOMEPATH'])
             : ($_SERVER['HOME'] ?? '~');
 
-        $this->configPath = rtrim($home, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '.bb-cli' . DIRECTORY_SEPARATOR . 'config.json';
+        $this->configPath = rtrim($home, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'.bb-cli'.DIRECTORY_SEPARATOR.'config.json';
     }
 
     public function save(string $username, string $appPassword): void

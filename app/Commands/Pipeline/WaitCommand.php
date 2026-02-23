@@ -42,7 +42,7 @@ class WaitCommand extends Command
                 $repo['repo_slug'],
                 $id,
                 function (Pipeline $p) {
-                    $this->output->write("\r  " . $this->colorize($p->state->value, $p->state->color()) . ' ');
+                    $this->output->write("\r  ".$this->colorize($p->state->value, $p->state->color()).' ');
                 },
             );
 

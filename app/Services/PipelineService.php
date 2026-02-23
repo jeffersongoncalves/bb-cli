@@ -27,7 +27,7 @@ class PipelineService
         return ! empty($values) ? $values[0] : null;
     }
 
-    public function wait(string $workspace, string $repoSlug, string $pipelineUuid, callable $onPoll = null): Pipeline
+    public function wait(string $workspace, string $repoSlug, string $pipelineUuid, ?callable $onPoll = null): Pipeline
     {
         while (true) {
             $data = $this->get($workspace, $repoSlug, $pipelineUuid);

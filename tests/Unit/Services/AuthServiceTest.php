@@ -3,9 +3,9 @@
 use App\Services\AuthService;
 
 beforeEach(function () {
-    $this->tempDir = sys_get_temp_dir() . '/bb-cli-test-' . uniqid();
+    $this->tempDir = sys_get_temp_dir().'/bb-cli-test-'.uniqid();
     mkdir($this->tempDir, 0700, true);
-    $this->configPath = $this->tempDir . '/config.json';
+    $this->configPath = $this->tempDir.'/config.json';
 
     $this->authService = new AuthService;
     $this->authService->setConfigPath($this->configPath);
@@ -61,7 +61,7 @@ it('checks authentication status', function () {
 });
 
 it('creates directory if not exists', function () {
-    $nestedPath = $this->tempDir . '/nested/deep/config.json';
+    $nestedPath = $this->tempDir.'/nested/deep/config.json';
     $this->authService->setConfigPath($nestedPath);
     $this->authService->save('testuser', 'testpass');
 
@@ -69,6 +69,6 @@ it('creates directory if not exists', function () {
 
     // Cleanup
     unlink($nestedPath);
-    rmdir($this->tempDir . '/nested/deep');
-    rmdir($this->tempDir . '/nested');
+    rmdir($this->tempDir.'/nested/deep');
+    rmdir($this->tempDir.'/nested');
 });

@@ -25,7 +25,7 @@ class ShowCommand extends Command
             }
 
             $this->components->twoColumnDetail('Username', $credentials->username);
-            $this->components->twoColumnDetail('App Password', str_repeat('*', 8) . substr($credentials->appPassword, -4));
+            $this->components->twoColumnDetail('App Password', str_repeat('*', 8).substr($credentials->appPassword, -4));
             $this->components->twoColumnDetail('Config Path', $authService->getConfigPath());
 
             return self::SUCCESS;

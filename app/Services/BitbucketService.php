@@ -27,7 +27,7 @@ class BitbucketService
 
         $this->credentials = $credentials;
         $this->client = new Client([
-            'base_uri' => self::BASE_URL . '/',
+            'base_uri' => self::BASE_URL.'/',
             'auth' => [$this->credentials->username, $this->credentials->appPassword],
             'headers' => [
                 'Accept' => 'application/json',
