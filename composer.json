@@ -32,6 +32,26 @@
             "Tests\\": "tests/"
         }
     },
+    "scripts": {
+        "build": [
+            "php bb app:build bb"
+        ],
+        "lint": "./vendor/bin/pint",
+        "refactor": "./vendor/bin/rector process",
+        "test:lint": "./vendor/bin/pint --test",
+        "test:unit": "./vendor/bin/pest --parallel",
+        "test:unit:coverage": "./vendor/bin/pest --parallel --coverage",
+        "test:types": "./vendor/bin/phpstan analyse --memory-limit=256M",
+        "test:refactor": "./vendor/bin/rector process --dry-run",
+        "phpstan": "./vendor/bin/phpstan analyse --memory-limit=256M",
+        "phpstan-baseline": "./vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M",
+        "test": [
+            "@test:unit",
+            "@test:lint",
+            "@test:types",
+            "@test:refactor"
+        ]
+    },
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
