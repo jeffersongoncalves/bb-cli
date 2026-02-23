@@ -1,0 +1,9 @@
+{
+    "pagelen": 10,
+    "values": [
+        {"username": "reviewer1", "display_name": "Reviewer One"},
+        {"username": "reviewer2", "display_name": "Reviewer Two"}
+    ],
+    "page": 1,
+    "size": 2
+}

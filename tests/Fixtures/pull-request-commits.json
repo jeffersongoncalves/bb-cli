@@ -1,0 +1,19 @@
+{
+    "pagelen": 10,
+    "values": [
+        {
+            "hash": "abc123def456789012345678901234567890",
+            "author": {"user": {"display_name": "John Doe"}, "raw": "John Doe <john@example.com>"},
+            "message": "Initial commit for feature",
+            "date": "2024-01-01T10:00:00+00:00"
+        },
+        {
+            "hash": "def456abc789012345678901234567890123",
+            "author": {"user": {"display_name": "John Doe"}, "raw": "John Doe <john@example.com>"},
+            "message": "Add tests",
+            "date": "2024-01-02T10:00:00+00:00"
+        }
+    ],
+    "page": 1,
+    "size": 2
+}

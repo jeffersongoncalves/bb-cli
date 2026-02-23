@@ -1,0 +1,21 @@
+{
+    "pagelen": 10,
+    "values": [
+        {
+            "uuid": "{env-uuid-staging}",
+            "name": "Staging",
+            "slug": "staging",
+            "environment_type": {"name": "Staging"},
+            "rank": 1
+        },
+        {
+            "uuid": "{env-uuid-production}",
+            "name": "Production",
+            "slug": "production",
+            "environment_type": {"name": "Production"},
+            "rank": 2
+        }
+    ],
+    "page": 1,
+    "size": 2
+}

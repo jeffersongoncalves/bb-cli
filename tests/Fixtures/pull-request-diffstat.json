@@ -1,0 +1,21 @@
+{
+    "pagelen": 10,
+    "values": [
+        {
+            "status": "modified",
+            "old": {"path": "src/file.php"},
+            "new": {"path": "src/file.php"},
+            "lines_added": 10,
+            "lines_removed": 3
+        },
+        {
+            "status": "added",
+            "old": null,
+            "new": {"path": "src/new-file.php"},
+            "lines_added": 25,
+            "lines_removed": 0
+        }
+    ],
+    "page": 1,
+    "size": 2
+}

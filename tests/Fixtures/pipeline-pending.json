@@ -1,0 +1,10 @@
+{
+    "uuid": "{pipeline-uuid-456}",
+    "build_number": 43,
+    "state": {"name": "PENDING"},
+    "trigger": {"name": "push"},
+    "target": {"ref_name": "develop"},
+    "created_on": "2024-01-02T10:00:00+00:00",
+    "completed_on": null,
+    "duration_in_seconds": null
+}

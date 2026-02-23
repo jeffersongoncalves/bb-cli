@@ -1,0 +1,31 @@
+{
+    "pagelen": 10,
+    "values": [
+        {
+            "id": 1,
+            "title": "Feature branch",
+            "state": "OPEN",
+            "author": {"display_name": "John Doe"},
+            "source": {"branch": {"name": "feature/test"}},
+            "destination": {"branch": {"name": "main"}},
+            "description": "A test PR",
+            "created_on": "2024-01-01T10:00:00+00:00",
+            "updated_on": "2024-01-02T10:00:00+00:00",
+            "links": {"html": {"href": "https://bitbucket.org/workspace/repo/pull-requests/1"}}
+        },
+        {
+            "id": 2,
+            "title": "Bugfix branch",
+            "state": "OPEN",
+            "author": {"display_name": "Jane Smith"},
+            "source": {"branch": {"name": "bugfix/issue-42"}},
+            "destination": {"branch": {"name": "main"}},
+            "description": "Fixing issue 42",
+            "created_on": "2024-01-03T10:00:00+00:00",
+            "updated_on": "2024-01-04T10:00:00+00:00",
+            "links": {"html": {"href": "https://bitbucket.org/workspace/repo/pull-requests/2"}}
+        }
+    ],
+    "page": 1,
+    "size": 2
+}

@@ -1,0 +1,17 @@
+{
+    "pagelen": 10,
+    "values": [
+        {
+            "uuid": "{pipeline-uuid-123}",
+            "build_number": 42,
+            "state": {"name": "COMPLETED", "result": {"name": "SUCCESSFUL"}},
+            "trigger": {"name": "push"},
+            "target": {"ref_name": "main"},
+            "created_on": "2024-01-01T10:00:00+00:00",
+            "completed_on": "2024-01-01T10:05:00+00:00",
+            "duration_in_seconds": 300
+        }
+    ],
+    "page": 1,
+    "size": 1
+}

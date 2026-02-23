@@ -1,0 +1,12 @@
+{
+    "id": 3,
+    "title": "New feature",
+    "state": "OPEN",
+    "author": {"display_name": "John Doe"},
+    "source": {"branch": {"name": "feature/new"}},
+    "destination": {"branch": {"name": "main"}},
+    "description": "New feature description",
+    "created_on": "2024-01-05T10:00:00+00:00",
+    "updated_on": "2024-01-05T10:00:00+00:00",
+    "links": {"html": {"href": "https://bitbucket.org/workspace/repo/pull-requests/3"}}
+}
