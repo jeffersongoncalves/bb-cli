@@ -63,10 +63,7 @@ jobs:
         run: "echo ${{ steps.changelog-updater.outputs.unreleased_compare_url }}"
 
       - name: Write Version to File
-        uses: brettdorrans/write-version-to-file@v1.1.0
-        with:
-          filename: 'version.txt'
-          placeholder: '${VERSION}'
+        run: echo "${{ github.event.release.tag_name }}" > version.txt
 
       - name: Commit updated CHANGELOG
         uses: stefanzweifel/git-auto-commit-action@v7
