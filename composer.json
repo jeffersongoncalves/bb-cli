@@ -12,13 +12,13 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "ext-json": "*",
-        "guzzlehttp/guzzle": "^7.9",
-        "laravel-zero/framework": "^12.0.2"
+        "php": "^8.2"
     },
     "require-dev": {
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/pint": "^1.25.1",
+        "laravel-zero/framework": "^12.0.2",
         "mockery/mockery": "^1.6.12",
         "pestphp/pest": "^3.8.4|^4.1.2",
         "phpstan/phpstan": "^2.1",

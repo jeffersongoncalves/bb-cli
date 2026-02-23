@@ -3,7 +3,7 @@
 A modern Bitbucket Cloud CLI built with [Laravel Zero](https://laravel-zero.com/).
 
 <p align="center">
-  <a href="https://github.com/jeffersongoncalves/bb-cli/actions"><img src="https://github.com/jeffersongoncalves/bb-cli/actions/workflows/tests.yml/badge.svg" alt="Tests" /></a>
+  <a href="https://github.com/jeffersongoncalves/bb-cli/actions"><img src="https://github.com/jeffersongoncalves/bb-cli/actions/workflows/run-tests.yml/badge.svg" alt="Tests" /></a>
   <a href="https://github.com/jeffersongoncalves/bb-cli/blob/main/LICENSE"><img src="https://img.shields.io/github/license/jeffersongoncalves/bb-cli" alt="License" /></a>
   <img src="https://img.shields.io/badge/php-%3E%3D8.2-8892BF" alt="PHP 8.2+" />
 </p>
