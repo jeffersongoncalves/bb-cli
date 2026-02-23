@@ -1,8 +1,11 @@
 <?php
 
 use App\Services\AuthService;
+use Laravel\Prompts\Prompt;
 
 it('saves credentials successfully', function () {
+    Prompt::fallbackWhen(true);
+
     $authService = Mockery::mock(AuthService::class);
     $authService->shouldReceive('save')->once()->with('testuser', 'testpass');
     $authService->shouldReceive('getConfigPath')->andReturn('/home/user/.bb-cli/config.json');
