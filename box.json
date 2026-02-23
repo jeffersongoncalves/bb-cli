@@ -15,6 +15,5 @@
     "compactors": [
         "KevinGH\\Box\\Compactor\\Php",
         "KevinGH\\Box\\Compactor\\Json"
-    ],
-    "force-autodiscovery": true
+    ]
 }

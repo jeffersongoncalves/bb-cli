@@ -62,5 +62,5 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "bin": ["bb"]
+    "bin": ["builds/bb"]
 }
