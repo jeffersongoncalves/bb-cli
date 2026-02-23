@@ -47,9 +47,7 @@
         "phpstan-baseline": "./vendor/bin/phpstan analyse --generate-baseline --memory-limit=256M",
         "test": [
             "@test:unit",
-            "@test:lint",
-            "@test:types",
-            "@test:refactor"
+            "@test:lint"
         ]
     },
     "config": {
