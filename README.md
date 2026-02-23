@@ -1,41 +1,155 @@
-<p align="center">
-    <img title="Laravel Zero" height="100" src="https://raw.githubusercontent.com/laravel-zero/docs/master/images/logo/laravel-zero-readme.png" alt="Laravel Zero Logo" />
-</p>
+# BB CLI
+
+A modern Bitbucket Cloud CLI built with [Laravel Zero](https://laravel-zero.com/).
 
 <p align="center">
-  <a href="https://github.com/laravel-zero/framework/actions"><img src="https://github.com/laravel-zero/laravel-zero/actions/workflows/tests.yml/badge.svg" alt="Build Status" /></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://img.shields.io/packagist/dt/laravel-zero/framework.svg" alt="Total Downloads" /></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://img.shields.io/packagist/v/laravel-zero/framework.svg?label=stable" alt="Latest Stable Version" /></a>
-  <a href="https://packagist.org/packages/laravel-zero/framework"><img src="https://img.shields.io/packagist/l/laravel-zero/framework.svg" alt="License" /></a>
+  <a href="https://github.com/jeffersongoncalves/bb-cli/actions"><img src="https://github.com/jeffersongoncalves/bb-cli/actions/workflows/tests.yml/badge.svg" alt="Tests" /></a>
+  <a href="https://github.com/jeffersongoncalves/bb-cli/blob/main/LICENSE"><img src="https://img.shields.io/github/license/jeffersongoncalves/bb-cli" alt="License" /></a>
+  <img src="https://img.shields.io/badge/php-%3E%3D8.2-8892BF" alt="PHP 8.2+" />
 </p>
 
-Laravel Zero was created by [Nuno Maduro](https://github.com/nunomaduro) and [Owen Voke](https://github.com/owenvoke), and is a micro-framework that provides an elegant starting point for your console application. It is an **unofficial** and customized version of Laravel optimized for building command-line applications.
+## Features
 
-- Built on top of the [Laravel](https://laravel.com) components.
-- Optional installation of Laravel [Eloquent](https://laravel-zero.com/docs/database/), Laravel [Logging](https://laravel-zero.com/docs/logging/) and many others.
-- Supports interactive [menus](https://laravel-zero.com/docs/build-interactive-menus/) and [desktop notifications](https://laravel-zero.com/docs/send-desktop-notifications/) on Linux, Windows & MacOS.
-- Ships with a [Scheduler](https://laravel-zero.com/docs/task-scheduling/) and  a [Standalone Compiler](https://laravel-zero.com/docs/build-a-standalone-application/).
-- Integration with [Collision](https://github.com/nunomaduro/collision) - Beautiful error reporting
-- Follow the creator Nuno Maduro:
-    - YouTube: **[youtube.com/@nunomaduro](https://www.youtube.com/@nunomaduro)** — Videos every weekday
-    - Twitch: **[twitch.tv/enunomaduro](https://www.twitch.tv/enunomaduro)** — Streams (almost) every weekday
-    - Twitter / X: **[x.com/enunomaduro](https://x.com/enunomaduro)**
-    - LinkedIn: **[linkedin.com/in/nunomaduro](https://www.linkedin.com/in/nunomaduro)**
-    - Instagram: **[instagram.com/enunomaduro](https://www.instagram.com/enunomaduro)**
-    - Tiktok: **[tiktok.com/@enunomaduro](https://www.tiktok.com/@enunomaduro)**
+- **Pull Requests** - Create, list, approve, merge, decline, diff, and manage PRs
+- **Pipelines** - Trigger, monitor, and wait for CI/CD pipelines
+- **Branches** - List and filter branches by name or author
+- **Environments** - Manage deployment environments and variables
+- **Authentication** - Secure credential storage with app passwords
+- **Browse** - Open repositories in the browser from the terminal
+- **Auto-detection** - Automatically detects workspace/repo from git remote
 
-------
+## Requirements
 
-## Documentation
+- PHP 8.2+
+- Git
 
-For full documentation, visit [laravel-zero.com](https://laravel-zero.com/).
+## Installation
 
-## Support the development
-**Do you like this project? Support it by donating**
+```bash
+composer global require jeffersongoncalves/bb-cli
+```
 
-- PayPal: [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66BYDWAT92N6L)
-- Patreon: [Donate](https://www.patreon.com/nunomaduro)
+Or clone and build locally:
+
+```bash
+git clone https://github.com/jeffersongoncalves/bb-cli.git
+cd bb-cli
+composer install
+php bb app:build bb
+```
+
+## Getting Started
+
+### 1. Save your credentials
+
+```bash
+bb auth:save
+```
+
+You will be prompted for your Bitbucket username and [app password](https://support.atlassian.com/bitbucket-cloud/docs/create-an-app-password/).
+
+### 2. Verify authentication
+
+```bash
+bb auth:show
+```
+
+### 3. Start using commands
+
+```bash
+bb pr:list
+bb pipeline:latest
+bb browse
+```
+
+> All commands auto-detect the repository from your git remote. Use `--project=owner/repo` to override.
+
+## Commands
+
+### Authentication
+
+| Command | Description |
+|---------|-------------|
+| `auth:save` | Save Bitbucket credentials (username and app password) |
+| `auth:show` | Display saved credentials |
+
+### Pull Requests
+
+| Command | Description |
+|---------|-------------|
+| `pr:list` | List pull requests (filter by `--state` and `--destination`) |
+| `pr:create <source> [destination]` | Create a new pull request |
+| `pr:approve <id>` | Approve a PR (use `0` to approve all open PRs) |
+| `pr:unapprove <id>` | Remove approval from a PR |
+| `pr:request-changes <id>` | Request changes on a PR |
+| `pr:unrequest-changes <id>` | Remove change request from a PR |
+| `pr:merge <id>` | Merge a PR (`--strategy=merge_commit\|squash\|fast_forward`) |
+| `pr:decline <id>` | Decline a PR |
+| `pr:commits <id>` | List commits in a PR |
+| `pr:diff <id>` | Display the diff of a PR |
+| `pr:files <id>` | List changed files in a PR |
+
+### Pipelines
+
+| Command | Description |
+|---------|-------------|
+| `pipeline:latest` | Get the latest pipeline status |
+| `pipeline:get <id>` | Get pipeline details by UUID or build number |
+| `pipeline:run <branch>` | Trigger a pipeline for a branch |
+| `pipeline:custom <branch> <pattern>` | Trigger a custom pipeline |
+| `pipeline:wait [id]` | Wait for a pipeline to complete with live status |
+
+### Branches
+
+| Command | Description |
+|---------|-------------|
+| `branch:list` | List all repository branches |
+| `branch:name <pattern>` | Filter branches by name pattern |
+| `branch:user <name>` | List branches by a specific author |
+
+### Environments
+
+| Command | Description |
+|---------|-------------|
+| `env:list` | List deployment environments |
+| `env:variables <environment>` | List variables for an environment |
+| `env:create-variable <environment>` | Create an environment variable |
+| `env:update-variable <environment>` | Update an environment variable |
+
+### Browse
+
+| Command | Description |
+|---------|-------------|
+| `browse` | Open repository in the browser |
+| `browse:show` | Display repository URL |
+
+## Global Options
+
+| Option | Description |
+|--------|-------------|
+| `--project=owner/repo` | Override auto-detected repository |
+| `--help` | Show command help |
+| `-v` | Verbose output |
+
+## Development
+
+```bash
+# Install dependencies
+composer install
+
+# Run tests
+composer test
+
+# Run tests only
+composer test:unit
+
+# Code formatting
+composer lint
+
+# Static analysis
+composer phpstan
+```
 
 ## License
 
-Laravel Zero is an open-source software licensed under the MIT license.
+BB CLI is open-source software licensed under the [MIT license](LICENSE).
