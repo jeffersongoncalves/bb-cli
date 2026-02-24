@@ -1,3 +1,9 @@
+<div class="filament-hidden">
+
+![BB CLI](https://raw.githubusercontent.com/jeffersongoncalves/bb-cli/main/art/jeffersongoncalves-bb-cli.png)
+
+</div>
+
 # BB CLI
 
 A modern Bitbucket Cloud CLI built with [Laravel Zero](https://laravel-zero.com/).
