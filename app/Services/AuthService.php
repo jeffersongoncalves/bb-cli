@@ -17,7 +17,7 @@ class AuthService
         $this->configPath = rtrim($home, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'.bb-cli'.DIRECTORY_SEPARATOR.'config.json';
     }
 
-    public function save(string $username, string $appPassword): void
+    public function save(string $username, string $apiToken): void
     {
         $dir = dirname($this->configPath);
 
@@ -25,7 +25,7 @@ class AuthService
             mkdir($dir, 0700, true);
         }
 
-        $credentials = new Credentials($username, $appPassword);
+        $credentials = new Credentials($username, $apiToken);
         file_put_contents($this->configPath, json_encode($credentials->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         chmod($this->configPath, 0600);
     }
@@ -38,7 +38,7 @@ class AuthService
 
         $data = json_decode(file_get_contents($this->configPath), true);
 
-        if (! $data || ! isset($data['username'], $data['app_password'])) {
+        if (! $data || ! isset($data['username']) || (! isset($data['api_token']) && ! isset($data['app_password']))) {
             return null;
         }
 

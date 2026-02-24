@@ -28,7 +28,7 @@ class BitbucketService
         $this->credentials = $credentials;
         $this->client = new Client([
             'base_uri' => self::BASE_URL.'/',
-            'auth' => [$this->credentials->username, $this->credentials->appPassword],
+            'auth' => [$this->credentials->username, $this->credentials->apiToken],
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
@@ -144,7 +144,7 @@ class BitbucketService
         $body = json_decode($response->getBody()->getContents(), true) ?? [];
 
         if ($statusCode === 401) {
-            throw new AuthenticationException('Invalid credentials. Check your username and app password.');
+            throw new AuthenticationException('Invalid credentials. Check your username and API token.');
         }
 
         throw BitbucketApiException::fromResponse($statusCode, $body);

@@ -15,7 +15,7 @@ A modern Bitbucket Cloud CLI built with [Laravel Zero](https://laravel-zero.com/
 - **Pipelines** - Trigger, monitor, and wait for CI/CD pipelines
 - **Branches** - List and filter branches by name or author
 - **Environments** - Manage deployment environments and variables
-- **Authentication** - Secure credential storage with app passwords
+- **Authentication** - Secure credential storage with API tokens
 - **Browse** - Open repositories in the browser from the terminal
 - **Auto-detection** - Automatically detects workspace/repo from git remote
 
@@ -41,21 +41,43 @@ php bb app:build bb
 
 ## Getting Started
 
-### 1. Save your credentials
+### 1. Create a Bitbucket API Token
+
+1. Go to your Bitbucket **Account settings** > **Security** > **[API tokens](https://support.atlassian.com/bitbucket-cloud/docs/api-tokens/)**
+2. Click **Create API token with scopes**
+3. Name the token (e.g. `bb-cli`) and set an expiry date
+4. Select **Bitbucket** as the app and grant the following [permissions](https://support.atlassian.com/bitbucket-cloud/docs/api-token-permissions/):
+
+> **Note:** In Bitbucket API tokens, Write does **not** imply Read — each permission must be granted separately.
+
+| Scope | Permission | Scope ID | Required for |
+|-------|-----------|----------|-------------|
+| **Repositories** | Read | `read:repository:bitbucket` | List branches, browse source code |
+| **Pull Requests** | Read | `read:pullrequest:bitbucket` | View and list PRs, diffs, commits |
+| **Pull Requests** | Write | `write:pullrequest:bitbucket` | Create, approve, merge, decline PRs |
+| **Pipelines** | Read | `read:pipeline:bitbucket` | View pipeline status and logs |
+| **Pipelines** | Write | `write:pipeline:bitbucket` | Trigger and stop pipelines |
+| **Pipelines** | Admin | `admin:pipeline:bitbucket` | Manage environment variables |
+
+5. Click **Create token** and **copy it immediately** — it will only be shown once
+
+> **Migrating from App Passwords?** API tokens are the [long-term replacement](https://support.atlassian.com/bitbucket-cloud/docs/api-tokens/) for App Passwords. Simply run `bb auth:save` again with your new API token — existing `config.json` files using the old `app_password` format are still supported.
+
+### 2. Save your credentials
 
 ```bash
 bb auth:save
 ```
 
-You will be prompted for your Bitbucket username and [app password](https://support.atlassian.com/bitbucket-cloud/docs/create-an-app-password/).
+You will be prompted for your Bitbucket username and API token.
 
-### 2. Verify authentication
+### 3. Verify authentication
 
 ```bash
 bb auth:show
 ```
 
-### 3. Start using commands
+### 4. Start using commands
 
 ```bash
 bb pr:list
@@ -71,7 +93,7 @@ bb browse
 
 | Command | Description |
 |---------|-------------|
-| `auth:save` | Save Bitbucket credentials (username and app password) |
+| `auth:save` | Save Bitbucket credentials (username and API token) |
 | `auth:show` | Display saved credentials |
 
 ### Pull Requests

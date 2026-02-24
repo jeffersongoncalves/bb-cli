@@ -27,7 +27,7 @@ it('saves credentials to config file', function () {
 
     $data = json_decode(file_get_contents($this->configPath), true);
     expect($data['username'])->toBe('testuser');
-    expect($data['app_password'])->toBe('testpass');
+    expect($data['api_token'])->toBe('testpass');
 });
 
 it('loads saved credentials', function () {
@@ -36,7 +36,20 @@ it('loads saved credentials', function () {
 
     expect($credentials)->not->toBeNull();
     expect($credentials->username)->toBe('testuser');
-    expect($credentials->appPassword)->toBe('testpass');
+    expect($credentials->apiToken)->toBe('testpass');
+});
+
+it('loads legacy app_password format', function () {
+    file_put_contents($this->configPath, json_encode([
+        'username' => 'testuser',
+        'app_password' => 'legacy-pass',
+    ]));
+
+    $credentials = $this->authService->load();
+
+    expect($credentials)->not->toBeNull();
+    expect($credentials->username)->toBe('testuser');
+    expect($credentials->apiToken)->toBe('legacy-pass');
 });
 
 it('returns null when config file does not exist', function () {

@@ -13,7 +13,7 @@ it('saves credentials successfully', function () {
 
     $this->artisan('auth:save')
         ->expectsQuestion('Bitbucket username', 'testuser')
-        ->expectsQuestion('Bitbucket app password', 'testpass')
+        ->expectsQuestion('Bitbucket API token', 'testpass')
         ->expectsOutputToContain('Credentials saved')
         ->assertExitCode(0);
 });

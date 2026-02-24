@@ -12,7 +12,7 @@ class SaveCommand extends Command
 {
     protected $signature = 'auth:save';
 
-    protected $description = 'Save Bitbucket credentials (username and app password)';
+    protected $description = 'Save Bitbucket credentials (username and API token)';
 
     public function handle(AuthService $authService): int
     {
@@ -21,12 +21,12 @@ class SaveCommand extends Command
             required: true,
         );
 
-        $appPassword = password(
-            label: 'Bitbucket app password',
+        $apiToken = password(
+            label: 'Bitbucket API token',
             required: true,
         );
 
-        $authService->save($username, $appPassword);
+        $authService->save($username, $apiToken);
 
         $this->components->info("Credentials saved to {$authService->getConfigPath()}");
 

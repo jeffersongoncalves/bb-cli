@@ -6,14 +6,14 @@ class Credentials
 {
     public function __construct(
         public readonly string $username,
-        public readonly string $appPassword,
+        public readonly string $apiToken,
     ) {}
 
     public static function fromArray(array $data): self
     {
         return new self(
             username: $data['username'],
-            appPassword: $data['app_password'],
+            apiToken: $data['api_token'] ?? $data['app_password'] ?? '',
         );
     }
 
@@ -21,7 +21,7 @@ class Credentials
     {
         return [
             'username' => $this->username,
-            'app_password' => $this->appPassword,
+            'api_token' => $this->apiToken,
         ];
     }
 }
