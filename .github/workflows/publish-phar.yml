@@ -14,16 +14,14 @@ jobs:
     name: Release PHAR
 
     steps:
-      - name: Extract the tag version
-        id: tag
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            GITHUB_REF=${{ github.event.inputs.tag }}
-          fi
-          echo "tag=${GITHUB_REF##*v}" >> "$GITHUB_OUTPUT"
-
       - name: Checkout the code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get release version
+        id: tag
+        run: echo "tag=$(git describe --tags --abbrev=0 2>/dev/null || echo unreleased)" >> "$GITHUB_OUTPUT"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
