@@ -144,7 +144,7 @@ class BitbucketService
         $body = json_decode($response->getBody()->getContents(), true) ?? [];
 
         if ($statusCode === 401) {
-            throw new AuthenticationException('Invalid credentials. Check your username and API token.');
+            throw new AuthenticationException('Invalid credentials. Check your email and API token. API tokens require your Atlassian account email, not your Bitbucket username.');
         }
 
         throw BitbucketApiException::fromResponse($statusCode, $body);

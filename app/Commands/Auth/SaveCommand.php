@@ -12,12 +12,13 @@ class SaveCommand extends Command
 {
     protected $signature = 'auth:save';
 
-    protected $description = 'Save Bitbucket credentials (username and API token)';
+    protected $description = 'Save Bitbucket credentials (email and API token)';
 
     public function handle(AuthService $authService): int
     {
         $username = text(
-            label: 'Bitbucket username',
+            label: 'Bitbucket account email',
+            placeholder: 'your-email@example.com',
             required: true,
         );
 

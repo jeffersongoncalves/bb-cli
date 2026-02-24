@@ -62,6 +62,8 @@ php bb app:build bb
 5. Click **Create token** and **copy it immediately** — it will only be shown once
 
 > **Migrating from App Passwords?** API tokens are the [long-term replacement](https://support.atlassian.com/bitbucket-cloud/docs/api-tokens/) for App Passwords. Simply run `bb auth:save` again with your new API token — existing `config.json` files using the old `app_password` format are still supported.
+>
+> **Important:** API tokens require your **Atlassian account email** for API authentication, not your Bitbucket username. Your email can be found in Bitbucket under **Personal settings** > **Email Aliases**.
 
 ### 2. Save your credentials
 
@@ -69,7 +71,7 @@ php bb app:build bb
 bb auth:save
 ```
 
-You will be prompted for your Bitbucket username and API token.
+You will be prompted for your Atlassian account email and API token.
 
 ### 3. Verify authentication
 
@@ -93,7 +95,7 @@ bb browse
 
 | Command | Description |
 |---------|-------------|
-| `auth:save` | Save Bitbucket credentials (username and API token) |
+| `auth:save` | Save Bitbucket credentials (email and API token) |
 | `auth:show` | Display saved credentials |
 
 ### Pull Requests

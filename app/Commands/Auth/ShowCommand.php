@@ -24,7 +24,7 @@ class ShowCommand extends Command
                 throw new AuthenticationException;
             }
 
-            $this->components->twoColumnDetail('Username', $credentials->username);
+            $this->components->twoColumnDetail('Email', $credentials->username);
             $this->components->twoColumnDetail('API Token', str_repeat('*', 8).substr($credentials->apiToken, -4));
             $this->components->twoColumnDetail('Config Path', $authService->getConfigPath());
 
