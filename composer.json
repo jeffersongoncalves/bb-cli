@@ -35,9 +35,7 @@
         }
     },
     "scripts": {
-        "build": [
-            "php bb app:build bb"
-        ],
+        "build": "php bb app:build bb --build-version=\"$(git describe --tags --abbrev=0 2>/dev/null || echo unreleased)\"",
         "lint": "./vendor/bin/pint",
         "refactor": "./vendor/bin/rector process",
         "test:lint": "./vendor/bin/pint --test",
