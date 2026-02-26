@@ -29,7 +29,7 @@ class PullRequest
             destinationBranch: $data['destination']['branch']['name'] ?? '',
             createdOn: $data['created_on'] ?? '',
             updatedOn: $data['updated_on'] ?? '',
-            description: $data['description'] ?? null,
+            description: $data['summary']['raw'] ?? null,
         );
     }
 }

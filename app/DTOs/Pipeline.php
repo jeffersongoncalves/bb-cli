@@ -32,7 +32,7 @@ class Pipeline
             target: $data['target']['ref_name'] ?? $data['target']['selector']['pattern'] ?? null,
             createdOn: $data['created_on'] ?? null,
             completedOn: $data['completed_on'] ?? null,
-            durationInSeconds: $data['duration_in_seconds'] ?? null,
+            durationInSeconds: $data['build_seconds_used'] ?? null,
         );
     }
 

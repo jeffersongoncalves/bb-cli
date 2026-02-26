@@ -8,7 +8,7 @@
             "author": {"display_name": "John Doe"},
             "source": {"branch": {"name": "feature/test"}},
             "destination": {"branch": {"name": "main"}},
-            "description": "A test PR",
+            "summary": {"raw": "A test PR", "markup": "markdown", "html": "<p>A test PR</p>"},
             "created_on": "2024-01-01T10:00:00+00:00",
             "updated_on": "2024-01-02T10:00:00+00:00",
             "links": {"html": {"href": "https://bitbucket.org/workspace/repo/pull-requests/1"}}
@@ -20,7 +20,7 @@
             "author": {"display_name": "Jane Smith"},
             "source": {"branch": {"name": "bugfix/issue-42"}},
             "destination": {"branch": {"name": "main"}},
-            "description": "Fixing issue 42",
+            "summary": {"raw": "Fixing issue 42", "markup": "markdown", "html": "<p>Fixing issue 42</p>"},
             "created_on": "2024-01-03T10:00:00+00:00",
             "updated_on": "2024-01-04T10:00:00+00:00",
             "links": {"html": {"href": "https://bitbucket.org/workspace/repo/pull-requests/2"}}

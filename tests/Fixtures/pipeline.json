@@ -6,5 +6,5 @@
     "target": {"ref_name": "main", "selector": {"pattern": "default"}},
     "created_on": "2024-01-01T10:00:00+00:00",
     "completed_on": "2024-01-01T10:05:00+00:00",
-    "duration_in_seconds": 300
+    "build_seconds_used": 300
 }

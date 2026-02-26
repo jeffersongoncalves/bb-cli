@@ -20,7 +20,7 @@ class CreateCommand extends Command
         {destination? : Destination branch (defaults to main)}
         {--title= : Pull request title}
         {--description= : Pull request description}
-        {--reviewers= : Comma-separated list of reviewer usernames}
+        {--reviewers= : Comma-separated list of reviewer UUIDs}
         {--close-source : Close source branch after merge}
         {--project= : The repository (owner/repo)}';
 
@@ -47,7 +47,7 @@ class CreateCommand extends Command
 
             $data = [
                 'title' => $title,
-                'description' => $description,
+                'summary' => ['raw' => $description, 'markup' => 'markdown'],
                 'source' => ['branch' => ['name' => $source]],
                 'destination' => ['branch' => ['name' => $destination]],
                 'close_source_branch' => $this->option('close-source'),
@@ -55,7 +55,7 @@ class CreateCommand extends Command
 
             if ($reviewers = $this->option('reviewers')) {
                 $reviewerList = array_map(
-                    fn ($r) => ['username' => trim($r)],
+                    fn ($r) => ['uuid' => trim($r)],
                     explode(',', $reviewers),
                 );
                 $data['reviewers'] = $reviewerList;
