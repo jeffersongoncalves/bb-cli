@@ -42,7 +42,7 @@ jobs:
         run: php bb app:build bb.phar --build-version=${{ steps.tag.outputs.tag }} -v
 
       - name: Upload the PHAR artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: bb.phar
           path: builds/bb.phar
