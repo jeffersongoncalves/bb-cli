@@ -5,15 +5,15 @@ namespace App\Services;
 use App\DTOs\Credentials;
 use App\Exceptions\AuthenticationException;
 use App\Exceptions\BitbucketApiException;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
+use JeffersonGoncalves\LaravelZero\ApiClient\AbstractApiClient;
+use JeffersonGoncalves\LaravelZero\ApiClient\ApiException;
+use JeffersonGoncalves\LaravelZero\ApiClient\Auth;
 
-class BitbucketService
+class BitbucketService extends AbstractApiClient
 {
     protected const BASE_URL = 'https://api.bitbucket.org/2.0';
-
-    protected Client $client;
 
     protected Credentials $credentials;
 
@@ -26,127 +26,85 @@ class BitbucketService
         }
 
         $this->credentials = $credentials;
-        $this->client = new Client([
-            'base_uri' => self::BASE_URL.'/',
-            'auth' => [$this->credentials->username, $this->credentials->apiToken],
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ],
-        ]);
+
+        parent::__construct(
+            self::BASE_URL,
+            Auth::basic($credentials->username, $credentials->apiToken),
+        );
     }
 
-    public function get(string $workspace, string $repoSlug, string $endpoint, array $query = []): array
+    public function getRepo(string $workspace, string $repoSlug, string $endpoint, array $query = []): array
     {
-        return $this->request('GET', "repositories/{$workspace}/{$repoSlug}/{$endpoint}", $query);
+        return $this->get($this->repoPath($workspace, $repoSlug, $endpoint), $query);
     }
 
-    public function post(string $workspace, string $repoSlug, string $endpoint, array $data = []): array
+    public function postRepo(string $workspace, string $repoSlug, string $endpoint, array $data = []): array
     {
-        return $this->requestWithBody('POST', "repositories/{$workspace}/{$repoSlug}/{$endpoint}", $data);
+        return $this->post($this->repoPath($workspace, $repoSlug, $endpoint), $data);
     }
 
-    public function put(string $workspace, string $repoSlug, string $endpoint, array $data = []): array
+    public function putRepo(string $workspace, string $repoSlug, string $endpoint, array $data = []): array
     {
-        return $this->requestWithBody('PUT', "repositories/{$workspace}/{$repoSlug}/{$endpoint}", $data);
+        return $this->put($this->repoPath($workspace, $repoSlug, $endpoint), $data);
     }
 
-    public function delete(string $workspace, string $repoSlug, string $endpoint): array
+    public function deleteRepo(string $workspace, string $repoSlug, string $endpoint): array
     {
-        return $this->request('DELETE', "repositories/{$workspace}/{$repoSlug}/{$endpoint}");
+        return $this->delete($this->repoPath($workspace, $repoSlug, $endpoint));
     }
 
     public function getRaw(string $workspace, string $repoSlug, string $endpoint): string
     {
         try {
-            $response = $this->client->request('GET', "repositories/{$workspace}/{$repoSlug}/{$endpoint}", [
-                'headers' => ['Accept' => 'text/plain'],
+            $response = $this->client->request('GET', $this->repoPath($workspace, $repoSlug, $endpoint), [
+                'headers' => array_merge($this->authHeaders(), ['Accept' => 'text/plain']),
             ]);
 
             return $response->getBody()->getContents();
-        } catch (ClientException $e) {
-            $this->handleClientException($e);
+        } catch (BadResponseException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();
+            $body = json_decode($e->getResponse()->getBody()->getContents(), true) ?? [];
+
+            throw $this->newApiException($statusCode, $body);
         } catch (GuzzleException $e) {
-            throw new BitbucketApiException("HTTP request failed: {$e->getMessage()}");
+            throw $this->newApiException(0, ['message' => "HTTP request failed: {$e->getMessage()}"]);
         }
     }
 
-    public function paginate(string $workspace, string $repoSlug, string $endpoint, array $query = []): array
+    /**
+     * Walk a cursor-paginated Bitbucket endpoint, aggregating every item.
+     *
+     * Bitbucket returns items under "values" and an opaque absolute "next"
+     * URL for the following page.
+     */
+    public function paginateRepo(string $workspace, string $repoSlug, string $endpoint, array $query = []): array
     {
-        $results = [];
-        $url = "repositories/{$workspace}/{$repoSlug}/{$endpoint}";
-
-        do {
-            $response = $this->request('GET', $url, $query);
-            $results = array_merge($results, $response['values'] ?? []);
-            $url = $response['next'] ?? null;
-            $query = []; // next URL already contains query params
-        } while ($url);
-
-        return $results;
+        return $this->paginate(
+            $this->repoPath($workspace, $repoSlug, $endpoint),
+            $query,
+            fn (array $response): array => $response['values'] ?? [],
+            fn (array $response): ?array => isset($response['next']) && is_string($response['next'])
+                ? ['path' => $response['next'], 'query' => []]
+                : null,
+        );
     }
 
     public function getCurrentUser(): array
     {
-        return $this->request('GET', 'user');
+        return $this->get('user');
     }
 
-    protected function request(string $method, string $uri, array $query = []): array
+    protected function newApiException(int $statusCode, array $body): ApiException
     {
-        try {
-            $options = [];
-            if (! empty($query)) {
-                $options['query'] = $query;
-            }
-
-            $response = $this->client->request($method, $uri, $options);
-            $body = $response->getBody()->getContents();
-
-            if (empty($body)) {
-                return [];
-            }
-
-            return json_decode($body, true) ?? [];
-        } catch (ClientException $e) {
-            $this->handleClientException($e);
-        } catch (GuzzleException $e) {
-            throw new BitbucketApiException("HTTP request failed: {$e->getMessage()}");
-        }
-    }
-
-    protected function requestWithBody(string $method, string $uri, array $data = []): array
-    {
-        try {
-            $options = [];
-            if (! empty($data)) {
-                $options['json'] = $data;
-            }
-
-            $response = $this->client->request($method, $uri, $options);
-            $body = $response->getBody()->getContents();
-
-            if (empty($body)) {
-                return [];
-            }
-
-            return json_decode($body, true) ?? [];
-        } catch (ClientException $e) {
-            $this->handleClientException($e);
-        } catch (GuzzleException $e) {
-            throw new BitbucketApiException("HTTP request failed: {$e->getMessage()}");
-        }
-    }
-
-    protected function handleClientException(ClientException $e): never
-    {
-        $response = $e->getResponse();
-        $statusCode = $response->getStatusCode();
-        $body = json_decode($response->getBody()->getContents(), true) ?? [];
-
         if ($statusCode === 401) {
             throw new AuthenticationException('Invalid credentials. Check your email and API token. API tokens require your Atlassian account email, not your Bitbucket username.');
         }
 
-        throw BitbucketApiException::fromResponse($statusCode, $body);
+        return BitbucketApiException::fromResponse($statusCode, $body);
+    }
+
+    protected function repoPath(string $workspace, string $repoSlug, string $endpoint): string
+    {
+        return "repositories/{$workspace}/{$repoSlug}/{$endpoint}";
     }
 }

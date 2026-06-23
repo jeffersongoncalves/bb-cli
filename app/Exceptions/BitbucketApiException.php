@@ -2,22 +2,34 @@
 
 namespace App\Exceptions;
 
-use RuntimeException;
+use JeffersonGoncalves\LaravelZero\ApiClient\ApiException;
 
-class BitbucketApiException extends RuntimeException
+class BitbucketApiException extends ApiException
 {
-    public function __construct(
-        string $message = 'Bitbucket API error.',
-        int $code = 0,
-        public readonly ?array $response = null,
-    ) {
-        parent::__construct($message, $code);
-    }
-
-    public static function fromResponse(int $statusCode, array $body): self
+    /**
+     * Pull the human-readable message out of a decoded Bitbucket error body.
+     *
+     * Bitbucket reports errors under "error.message" (or a plain "error"
+     * string), which we prefix with "Bitbucket API error:" to match the
+     * original CLI output. Transport-level failures arrive as a plain
+     * "message" key and are passed through unprefixed.
+     *
+     * @param  array<string, mixed>  $body
+     */
+    protected static function extractMessage(array $body): string
     {
-        $message = $body['error']['message'] ?? $body['error'] ?? "HTTP {$statusCode}";
+        if (isset($body['error']['message']) && is_string($body['error']['message'])) {
+            return 'Bitbucket API error: '.$body['error']['message'];
+        }
 
-        return new self("Bitbucket API error: {$message}", $statusCode, $body);
+        if (isset($body['error']) && is_string($body['error'])) {
+            return 'Bitbucket API error: '.$body['error'];
+        }
+
+        if (isset($body['message']) && is_string($body['message'])) {
+            return $body['message'];
+        }
+
+        return '';
     }
 }

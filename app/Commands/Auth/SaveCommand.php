@@ -2,6 +2,7 @@
 
 namespace App\Commands\Auth;
 
+use App\DTOs\Credentials;
 use App\Services\AuthService;
 use LaravelZero\Framework\Commands\Command;
 
@@ -27,7 +28,7 @@ class SaveCommand extends Command
             required: true,
         );
 
-        $authService->save($username, $apiToken);
+        $authService->save(new Credentials($username, $apiToken));
 
         $this->components->info("Credentials saved to {$authService->getConfigPath()}");
 

@@ -3,60 +3,25 @@
 namespace App\Services;
 
 use App\DTOs\Credentials;
+use JeffersonGoncalves\LaravelZero\Credentials\AbstractAuthService;
+use JeffersonGoncalves\LaravelZero\Credentials\CredentialsContract;
 
-class AuthService
+class AuthService extends AbstractAuthService
 {
-    protected string $configPath;
-
-    public function __construct()
-    {
-        $home = PHP_OS_FAMILY === 'Windows'
-            ? ($_SERVER['USERPROFILE'] ?? $_SERVER['HOMEDRIVE'].$_SERVER['HOMEPATH'])
-            : ($_SERVER['HOME'] ?? '~');
-
-        $this->configPath = rtrim($home, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'.bb-cli'.DIRECTORY_SEPARATOR.'config.json';
-    }
-
-    public function save(string $username, string $apiToken): void
-    {
-        $dir = dirname($this->configPath);
-
-        if (! is_dir($dir)) {
-            mkdir($dir, 0700, true);
-        }
-
-        $credentials = new Credentials($username, $apiToken);
-        file_put_contents($this->configPath, json_encode($credentials->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-        chmod($this->configPath, 0600);
-    }
-
     public function load(): ?Credentials
     {
-        if (! file_exists($this->configPath)) {
-            return null;
-        }
+        $credentials = parent::load();
 
-        $data = json_decode(file_get_contents($this->configPath), true);
+        return $credentials instanceof Credentials ? $credentials : null;
+    }
 
-        if (! $data || ! isset($data['username']) || (! isset($data['api_token']) && ! isset($data['app_password']))) {
-            return null;
-        }
+    protected function appName(): string
+    {
+        return 'bb-cli';
+    }
 
+    protected function fromArray(array $data): CredentialsContract
+    {
         return Credentials::fromArray($data);
-    }
-
-    public function isAuthenticated(): bool
-    {
-        return $this->load() !== null;
-    }
-
-    public function getConfigPath(): string
-    {
-        return $this->configPath;
-    }
-
-    public function setConfigPath(string $path): void
-    {
-        $this->configPath = $path;
     }
 }

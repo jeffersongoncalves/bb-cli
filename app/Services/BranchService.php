@@ -10,12 +10,12 @@ class BranchService
 
     public function list(string $workspace, string $repoSlug, array $query = []): array
     {
-        return $this->bitbucket->get($workspace, $repoSlug, 'refs/branches', $query);
+        return $this->bitbucket->getRepo($workspace, $repoSlug, 'refs/branches', $query);
     }
 
     public function listAll(string $workspace, string $repoSlug): array
     {
-        return $this->bitbucket->paginate($workspace, $repoSlug, 'refs/branches');
+        return $this->bitbucket->paginateRepo($workspace, $repoSlug, 'refs/branches');
     }
 
     public function filterByUser(string $workspace, string $repoSlug, string $username): array
@@ -33,7 +33,7 @@ class BranchService
 
     public function filterByName(string $workspace, string $repoSlug, string $pattern): array
     {
-        return $this->bitbucket->paginate($workspace, $repoSlug, 'refs/branches', [
+        return $this->bitbucket->paginateRepo($workspace, $repoSlug, 'refs/branches', [
             'q' => "name ~ \"{$pattern}\"",
         ]);
     }

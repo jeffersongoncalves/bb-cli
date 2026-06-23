@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use JeffersonGoncalves\LaravelZero\Support\Browser;
+
 class BrowseService
 {
     public function getUrl(string $workspace, string $repoSlug): string
@@ -9,14 +11,8 @@ class BrowseService
         return "https://bitbucket.org/{$workspace}/{$repoSlug}";
     }
 
-    public function open(string $url): void
+    public function open(string $url): bool
     {
-        $command = match (PHP_OS_FAMILY) {
-            'Windows' => "start \"\" \"{$url}\"",
-            'Darwin' => "open \"{$url}\"",
-            default => "xdg-open \"{$url}\"",
-        };
-
-        exec($command);
+        return Browser::open($url);
     }
 }

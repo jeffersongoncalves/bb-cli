@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\RepositoryNotFoundException;
+use JeffersonGoncalves\LaravelZero\Git\GitRemoteParser;
 
 class GitService
 {
@@ -42,17 +43,13 @@ class GitService
 
     public function parseRemoteUrl(string $url): array
     {
-        // SSH: git@bitbucket.org:owner/repo.git
-        if (preg_match('#^git@bitbucket\.org:([^/]+)/([^/]+?)(?:\.git)?$#', $url, $matches)) {
-            return ['workspace' => $matches[1], 'repo_slug' => $matches[2]];
+        $remote = GitRemoteParser::parse($url);
+
+        if ($remote === null || $remote->host !== 'bitbucket.org') {
+            throw new RepositoryNotFoundException("Not a Bitbucket remote URL: {$url}");
         }
 
-        // HTTPS: https://bitbucket.org/owner/repo.git
-        if (preg_match('#^https?://(?:[^@]+@)?bitbucket\.org/([^/]+)/([^/]+?)(?:\.git)?$#', $url, $matches)) {
-            return ['workspace' => $matches[1], 'repo_slug' => $matches[2]];
-        }
-
-        throw new RepositoryNotFoundException("Not a Bitbucket remote URL: {$url}");
+        return ['workspace' => $remote->owner, 'repo_slug' => $remote->repo];
     }
 
     public function getCurrentBranch(): ?string

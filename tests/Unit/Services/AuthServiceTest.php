@@ -1,37 +1,45 @@
 <?php
 
+use App\DTOs\Credentials;
 use App\Services\AuthService;
 
 beforeEach(function () {
     $this->tempDir = sys_get_temp_dir().'/bb-cli-test-'.uniqid();
-    mkdir($this->tempDir, 0700, true);
-    $this->configPath = $this->tempDir.'/config.json';
-
+    $this->originalHome = $_SERVER['HOME'] ?? null;
+    $_SERVER['HOME'] = $this->tempDir;
     $this->authService = new AuthService;
-    $this->authService->setConfigPath($this->configPath);
 });
 
 afterEach(function () {
-    if (file_exists($this->configPath)) {
-        unlink($this->configPath);
+    $configPath = $this->tempDir.'/.bb-cli/config.json';
+    if (file_exists($configPath)) {
+        unlink($configPath);
+    }
+    if (is_dir($this->tempDir.'/.bb-cli')) {
+        rmdir($this->tempDir.'/.bb-cli');
     }
     if (is_dir($this->tempDir)) {
         rmdir($this->tempDir);
     }
+    if ($this->originalHome === null) {
+        unset($_SERVER['HOME']);
+    } else {
+        $_SERVER['HOME'] = $this->originalHome;
+    }
 });
 
 it('saves credentials to config file', function () {
-    $this->authService->save('testuser', 'testpass');
+    $this->authService->save(new Credentials('testuser', 'testpass'));
 
-    expect(file_exists($this->configPath))->toBeTrue();
+    expect(file_exists($this->authService->getConfigPath()))->toBeTrue();
 
-    $data = json_decode(file_get_contents($this->configPath), true);
+    $data = json_decode(file_get_contents($this->authService->getConfigPath()), true);
     expect($data['username'])->toBe('testuser');
     expect($data['api_token'])->toBe('testpass');
 });
 
 it('loads saved credentials', function () {
-    $this->authService->save('testuser', 'testpass');
+    $this->authService->save(new Credentials('testuser', 'testpass'));
     $credentials = $this->authService->load();
 
     expect($credentials)->not->toBeNull();
@@ -40,7 +48,8 @@ it('loads saved credentials', function () {
 });
 
 it('loads legacy app_password format', function () {
-    file_put_contents($this->configPath, json_encode([
+    @mkdir($this->tempDir.'/.bb-cli', 0700, true);
+    file_put_contents($this->authService->getConfigPath(), json_encode([
         'username' => 'testuser',
         'app_password' => 'legacy-pass',
     ]));
@@ -53,35 +62,35 @@ it('loads legacy app_password format', function () {
 });
 
 it('returns null when config file does not exist', function () {
-    $credentials = $this->authService->load();
-
-    expect($credentials)->toBeNull();
+    expect($this->authService->load())->toBeNull();
 });
 
 it('returns null when config file is invalid', function () {
-    file_put_contents($this->configPath, 'invalid json');
-    $credentials = $this->authService->load();
+    @mkdir($this->tempDir.'/.bb-cli', 0700, true);
+    file_put_contents($this->authService->getConfigPath(), 'invalid json');
 
-    expect($credentials)->toBeNull();
+    expect($this->authService->load())->toBeNull();
 });
 
 it('checks authentication status', function () {
     expect($this->authService->isAuthenticated())->toBeFalse();
 
-    $this->authService->save('testuser', 'testpass');
+    $this->authService->save(new Credentials('testuser', 'testpass'));
 
     expect($this->authService->isAuthenticated())->toBeTrue();
 });
 
 it('creates directory if not exists', function () {
-    $nestedPath = $this->tempDir.'/nested/deep/config.json';
-    $this->authService->setConfigPath($nestedPath);
-    $this->authService->save('testuser', 'testpass');
+    expect(is_dir($this->tempDir.'/.bb-cli'))->toBeFalse();
 
-    expect(file_exists($nestedPath))->toBeTrue();
+    $this->authService->save(new Credentials('testuser', 'testpass'));
 
-    // Cleanup
-    unlink($nestedPath);
-    rmdir($this->tempDir.'/nested/deep');
-    rmdir($this->tempDir.'/nested');
+    expect(is_dir($this->tempDir.'/.bb-cli'))->toBeTrue();
+});
+
+it('returns config path', function () {
+    $path = $this->authService->getConfigPath();
+
+    expect($path)->toContain('.bb-cli')
+        ->and($path)->toContain('config.json');
 });

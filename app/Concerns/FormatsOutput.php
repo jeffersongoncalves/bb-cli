@@ -2,22 +2,20 @@
 
 namespace App\Concerns;
 
+use JeffersonGoncalves\LaravelZero\Console\FormatsOutput as BaseFormatsOutput;
+
 trait FormatsOutput
 {
-    protected function renderTable(array $headers, array $rows): void
+    use BaseFormatsOutput;
+
+    /**
+     * Bitbucket-specific state -> color map (pull requests and pipelines).
+     *
+     * @return array<string, string>
+     */
+    protected function stateColors(): array
     {
-        if (empty($rows)) {
-            $this->components->info('No results found.');
-
-            return;
-        }
-
-        $this->table($headers, $rows);
-    }
-
-    protected function stateColor(string $state): string
-    {
-        return match (strtoupper($state)) {
+        return [
             'OPEN' => 'blue',
             'MERGED' => 'green',
             'DECLINED' => 'red',
@@ -30,27 +28,6 @@ trait FormatsOutput
             'BUILDING' => 'blue',
             'PAUSED' => 'gray',
             'HALTED' => 'red',
-            default => 'white',
-        };
-    }
-
-    protected function colorize(string $text, string $color): string
-    {
-        return "<fg={$color}>{$text}</>";
-    }
-
-    protected function formatDate(string $dateString): string
-    {
-        if (empty($dateString)) {
-            return '';
-        }
-
-        try {
-            $date = new \DateTime($dateString);
-
-            return $date->format('Y-m-d H:i');
-        } catch (\Exception) {
-            return $dateString;
-        }
+        ];
     }
 }

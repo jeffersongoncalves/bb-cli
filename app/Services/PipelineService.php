@@ -12,12 +12,12 @@ class PipelineService
 
     public function get(string $workspace, string $repoSlug, string $pipelineUuid): array
     {
-        return $this->bitbucket->get($workspace, $repoSlug, "pipelines/{$pipelineUuid}");
+        return $this->bitbucket->getRepo($workspace, $repoSlug, "pipelines/{$pipelineUuid}");
     }
 
     public function latest(string $workspace, string $repoSlug): ?array
     {
-        $response = $this->bitbucket->get($workspace, $repoSlug, 'pipelines/', [
+        $response = $this->bitbucket->getRepo($workspace, $repoSlug, 'pipelines/', [
             'sort' => '-created_on',
             'pagelen' => 1,
         ]);
@@ -47,7 +47,7 @@ class PipelineService
 
     public function run(string $workspace, string $repoSlug, string $branch): array
     {
-        return $this->bitbucket->post($workspace, $repoSlug, 'pipelines/', [
+        return $this->bitbucket->postRepo($workspace, $repoSlug, 'pipelines/', [
             'target' => [
                 'ref_type' => 'branch',
                 'type' => 'pipeline_ref_target',
@@ -58,7 +58,7 @@ class PipelineService
 
     public function custom(string $workspace, string $repoSlug, string $branch, string $pattern): array
     {
-        return $this->bitbucket->post($workspace, $repoSlug, 'pipelines/', [
+        return $this->bitbucket->postRepo($workspace, $repoSlug, 'pipelines/', [
             'target' => [
                 'ref_type' => 'branch',
                 'type' => 'pipeline_ref_target',

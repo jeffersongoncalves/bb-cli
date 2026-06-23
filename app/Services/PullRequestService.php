@@ -10,12 +10,12 @@ class PullRequestService
 
     public function list(string $workspace, string $repoSlug, array $query = []): array
     {
-        return $this->bitbucket->get($workspace, $repoSlug, 'pullrequests', $query);
+        return $this->bitbucket->getRepo($workspace, $repoSlug, 'pullrequests', $query);
     }
 
     public function get(string $workspace, string $repoSlug, int $prId): array
     {
-        return $this->bitbucket->get($workspace, $repoSlug, "pullrequests/{$prId}");
+        return $this->bitbucket->getRepo($workspace, $repoSlug, "pullrequests/{$prId}");
     }
 
     public function diff(string $workspace, string $repoSlug, int $prId): string
@@ -25,52 +25,52 @@ class PullRequestService
 
     public function files(string $workspace, string $repoSlug, int $prId): array
     {
-        return $this->bitbucket->paginate($workspace, $repoSlug, "pullrequests/{$prId}/diffstat");
+        return $this->bitbucket->paginateRepo($workspace, $repoSlug, "pullrequests/{$prId}/diffstat");
     }
 
     public function commits(string $workspace, string $repoSlug, int $prId): array
     {
-        return $this->bitbucket->paginate($workspace, $repoSlug, "pullrequests/{$prId}/commits");
+        return $this->bitbucket->paginateRepo($workspace, $repoSlug, "pullrequests/{$prId}/commits");
     }
 
     public function approve(string $workspace, string $repoSlug, int $prId): array
     {
-        return $this->bitbucket->post($workspace, $repoSlug, "pullrequests/{$prId}/approve");
+        return $this->bitbucket->postRepo($workspace, $repoSlug, "pullrequests/{$prId}/approve");
     }
 
     public function unapprove(string $workspace, string $repoSlug, int $prId): array
     {
-        return $this->bitbucket->delete($workspace, $repoSlug, "pullrequests/{$prId}/approve");
+        return $this->bitbucket->deleteRepo($workspace, $repoSlug, "pullrequests/{$prId}/approve");
     }
 
     public function requestChanges(string $workspace, string $repoSlug, int $prId): array
     {
-        return $this->bitbucket->post($workspace, $repoSlug, "pullrequests/{$prId}/request-changes");
+        return $this->bitbucket->postRepo($workspace, $repoSlug, "pullrequests/{$prId}/request-changes");
     }
 
     public function unrequestChanges(string $workspace, string $repoSlug, int $prId): array
     {
-        return $this->bitbucket->delete($workspace, $repoSlug, "pullrequests/{$prId}/request-changes");
+        return $this->bitbucket->deleteRepo($workspace, $repoSlug, "pullrequests/{$prId}/request-changes");
     }
 
     public function decline(string $workspace, string $repoSlug, int $prId): array
     {
-        return $this->bitbucket->post($workspace, $repoSlug, "pullrequests/{$prId}/decline");
+        return $this->bitbucket->postRepo($workspace, $repoSlug, "pullrequests/{$prId}/decline");
     }
 
     public function merge(string $workspace, string $repoSlug, int $prId, array $options = []): array
     {
-        return $this->bitbucket->post($workspace, $repoSlug, "pullrequests/{$prId}/merge", $options);
+        return $this->bitbucket->postRepo($workspace, $repoSlug, "pullrequests/{$prId}/merge", $options);
     }
 
     public function create(string $workspace, string $repoSlug, array $data): array
     {
-        return $this->bitbucket->post($workspace, $repoSlug, 'pullrequests', $data);
+        return $this->bitbucket->postRepo($workspace, $repoSlug, 'pullrequests', $data);
     }
 
     public function getDefaultReviewers(string $workspace, string $repoSlug): array
     {
-        return $this->bitbucket->paginate($workspace, $repoSlug, 'default-reviewers');
+        return $this->bitbucket->paginateRepo($workspace, $repoSlug, 'default-reviewers');
     }
 
     public function getCurrentUser(): array
