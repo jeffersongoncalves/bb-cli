@@ -1,5 +1,11 @@
 <?php
 
+use Illuminate\Foundation\Console\VendorPublishCommand;
+use NunoMaduro\LaravelConsoleSummary\SummaryCommand;
+use Symfony\Component\Console\Command\DumpCompletionCommand;
+use Symfony\Component\Console\Command\HelpCommand;
+use Symfony\Component\Console\Command\ListCommand;
+
 return [
 
     /*
@@ -7,7 +13,7 @@ return [
     | Default Command
     |--------------------------------------------------------------------------
     */
-    'default' => NunoMaduro\LaravelConsoleSummary\SummaryCommand::class,
+    'default' => SummaryCommand::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -31,10 +37,10 @@ return [
     |--------------------------------------------------------------------------
     */
     'hidden' => [
-        NunoMaduro\LaravelConsoleSummary\SummaryCommand::class,
-        Symfony\Component\Console\Command\DumpCompletionCommand::class,
-        Symfony\Component\Console\Command\HelpCommand::class,
-        Symfony\Component\Console\Command\ListCommand::class,
+        SummaryCommand::class,
+        DumpCompletionCommand::class,
+        HelpCommand::class,
+        ListCommand::class,
     ],
 
     /*
@@ -43,7 +49,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'remove' => [
-        Illuminate\Foundation\Console\VendorPublishCommand::class,
+        VendorPublishCommand::class,
     ],
 
 ];
