@@ -2,11 +2,19 @@
 
 All notable changes to `bb-cli` will be documented in this file.
 
-## [Unreleased](https://github.com/jeffersongoncalves/bb-cli/compare/v1.2.3...main)
+## [Unreleased](https://github.com/jeffersongoncalves/bb-cli/compare/v1.3.0...main)
 
 ### Fixed
 
 - Align field names with Bitbucket Cloud API 2.0 spec
+
+## [v1.3.0](https://github.com/jeffersongoncalves/bb-cli/compare/v1.2.3...v1.3.0) - 2026-07-22
+
+### What's Changed
+
+* chore(deps): bump actions/cache from 5 to 6 by @dependabot[bot] in https://github.com/jeffersongoncalves/bb-cli/pull/6
+
+**Full Changelog**: https://github.com/jeffersongoncalves/bb-cli/compare/v1.2.3...v1.3.0
 
 ## [v1.2.3](https://github.com/jeffersongoncalves/bb-cli/compare/v1.2.2...v1.2.3) - 2026-06-23
 
