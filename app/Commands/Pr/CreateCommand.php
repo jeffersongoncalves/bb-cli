@@ -24,7 +24,7 @@ class CreateCommand extends Command
         {--close-source : Close source branch after merge}
         {--project= : The repository (owner/repo)}';
 
-    protected $description = 'Create a pull request';
+    protected $description = 'Create a pull request, or update it if one is already open for the source branch';
 
     public function handle(PullRequestService $prService): int
     {
@@ -61,9 +61,16 @@ class CreateCommand extends Command
                 $data['reviewers'] = $reviewerList;
             }
 
-            $result = $prService->create($repo['workspace'], $repo['repo_slug'], $data);
+            $existing = $prService->findOpenBySourceBranch($repo['workspace'], $repo['repo_slug'], $source);
 
-            $this->components->info("PR #{$result['id']} created: {$result['title']}");
+            if ($existing) {
+                $result = $prService->update($repo['workspace'], $repo['repo_slug'], $existing['id'], $data);
+                $this->components->info("PR #{$result['id']} updated: {$result['title']}");
+            } else {
+                $result = $prService->create($repo['workspace'], $repo['repo_slug'], $data);
+                $this->components->info("PR #{$result['id']} created: {$result['title']}");
+            }
+
             $this->components->twoColumnDetail('URL', $result['links']['html']['href'] ?? '');
 
             return self::SUCCESS;
