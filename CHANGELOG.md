@@ -2,11 +2,15 @@
 
 All notable changes to `bb-cli` will be documented in this file.
 
-## [Unreleased](https://github.com/jeffersongoncalves/bb-cli/compare/v1.3.0...main)
+## [Unreleased](https://github.com/jeffersongoncalves/bb-cli/compare/v1.3.1...HEAD)
 
 ### Fixed
 
 - Align field names with Bitbucket Cloud API 2.0 spec
+
+## [v1.3.1](https://github.com/jeffersongoncalves/bb-cli/compare/v1.3.0...v1.3.1) - 2026-07-24
+
+Release v1.3.1
 
 ## [v1.3.0](https://github.com/jeffersongoncalves/bb-cli/compare/v1.2.3...v1.3.0) - 2026-07-22
 
