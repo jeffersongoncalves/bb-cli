@@ -70,17 +70,19 @@ php bb app:build bb
 
 5. Click **Create token** and **copy it immediately** — it will only be shown once
 
-> **Migrating from App Passwords?** API tokens are the [long-term replacement](https://support.atlassian.com/bitbucket-cloud/docs/api-tokens/) for App Passwords. Simply run `bb auth:save` again with your new API token — existing `config.json` files using the old `app_password` format are still supported.
+> **Migrating from App Passwords?** API tokens are the [long-term replacement](https://support.atlassian.com/bitbucket-cloud/docs/api-tokens/) for App Passwords. Simply run `bb auth:save --interactive` again with your new API token — existing `config.json` files using the old `app_password` format are still supported.
 >
 > **Important:** API tokens require your **Atlassian account email** for API authentication, not your Bitbucket username. Your email can be found in Bitbucket under **Personal settings** > **Email Aliases**.
 
 ### 2. Save your credentials
 
 ```bash
-bb auth:save
+bb auth:save --interactive
 ```
 
-You will be prompted for your Atlassian account email and API token.
+You will be prompted for your Atlassian account email and API token. For scripts, pass them as options instead: `bb auth:save --email=you@example.com --token=...`.
+
+> Commands never prompt unless you pass `--interactive`, so scripts, CI and agents can't hang on a question. Missing options fall back to defaults or fail with an error.
 
 ### 3. Verify authentication
 
@@ -112,7 +114,7 @@ bb browse
 | Command | Description |
 |---------|-------------|
 | `pr:list` | List pull requests (filter by `--state` and `--destination`) |
-| `pr:create <source> [destination]` | Create a new pull request |
+| `pr:create <source> [destination]` | Create (or update) a pull request. Title defaults to the source branch; use `--description-file=<path>` (`-` for stdin) for multiline bodies |
 | `pr:approve <id>` | Approve a PR (use `0` to approve all open PRs) |
 | `pr:unapprove <id>` | Remove approval from a PR |
 | `pr:request-changes <id>` | Request changes on a PR |

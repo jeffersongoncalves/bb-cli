@@ -4,22 +4,26 @@ namespace App\Commands\Pr;
 
 use App\Concerns\FormatsOutput;
 use App\Concerns\InteractsWithBitbucket;
+use App\Concerns\PromptsOnRequest;
 use App\Concerns\ResolvesRepository;
 use App\Services\PullRequestService;
 use LaravelZero\Framework\Commands\Command;
+use RuntimeException;
 
 use function Laravel\Prompts\text;
 use function Laravel\Prompts\textarea;
 
 class CreateCommand extends Command
 {
-    use FormatsOutput, InteractsWithBitbucket, ResolvesRepository;
+    use FormatsOutput, InteractsWithBitbucket, PromptsOnRequest, ResolvesRepository;
 
     protected $signature = 'pr:create
         {source : Source branch}
         {destination? : Destination branch (defaults to main)}
-        {--title= : Pull request title}
-        {--description= : Pull request description}
+        {--title= : Pull request title (defaults to the source branch)}
+        {--description= : Pull request description (defaults to empty)}
+        {--description-file= : Read the description from a file (use - for stdin)}
+        {--interactive : Prompt for missing title and description}
         {--reviewers= : Comma-separated list of reviewer UUIDs}
         {--close-source : Close source branch after merge}
         {--project= : The repository (owner/repo)}';
@@ -34,20 +38,21 @@ class CreateCommand extends Command
             $source = $this->argument('source');
             $destination = $this->argument('destination') ?? 'main';
 
-            $title = $this->option('title') ?? text(
+            $title = $this->optionOrPrompt('title', fn () => text(
                 label: 'Pull request title',
                 default: $source,
                 required: true,
-            );
+            ), $source);
 
-            $description = $this->option('description') ?? textarea(
+            $description = $this->readDescriptionFile() ?? $this->optionOrPrompt('description', fn () => textarea(
                 label: 'Pull request description',
                 default: '',
-            );
+            ), '');
 
             $data = [
                 'title' => $title,
-                'summary' => ['raw' => $description, 'markup' => 'markdown'],
+                // Bitbucket rejects summary.markup ("extra keys not allowed"); raw is rendered as markdown.
+                'summary' => ['raw' => $description],
                 'source' => ['branch' => ['name' => $source]],
                 'destination' => ['branch' => ['name' => $destination]],
                 'close_source_branch' => $this->option('close-source'),
@@ -75,5 +80,30 @@ class CreateCommand extends Command
 
             return self::SUCCESS;
         });
+    }
+
+    /**
+     * Read --description-file (`-` = stdin). Multiline bodies can't go through
+     * the Composer bb.bat proxy on Windows as an argument.
+     */
+    private function readDescriptionFile(): ?string
+    {
+        $path = $this->option('description-file');
+
+        if ($path === null) {
+            return null;
+        }
+
+        if ($path === '-' && stream_isatty(STDIN)) {
+            throw new RuntimeException('--description-file=- expects piped stdin, not a terminal.');
+        }
+
+        $contents = $path === '-' ? stream_get_contents(STDIN) : @file_get_contents($path);
+
+        if ($contents === false) {
+            throw new RuntimeException("Unable to read description file: {$path}");
+        }
+
+        return $contents;
     }
 }

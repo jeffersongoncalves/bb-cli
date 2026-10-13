@@ -22,3 +22,13 @@ it('creates an environment variable', function () {
         ->expectsOutputToContain("Variable 'NEW_VAR' created")
         ->assertExitCode(0);
 });
+
+it('fails instead of prompting when the key is missing', function () {
+    $envService = Mockery::mock(EnvironmentService::class);
+    $envService->shouldNotReceive('createVariable');
+    $this->app->instance(EnvironmentService::class, $envService);
+
+    $this->artisan('env:create-variable env-uuid-staging --value=new-value --project=testworkspace/testrepo')
+        ->expectsOutputToContain('Missing --key')
+        ->assertExitCode(1);
+});
