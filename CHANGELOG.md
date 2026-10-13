@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2026-10-13
+
+### Bug Fixes
+
+- Make pr:create and other commands non-interactive by default
+- Refuse --description-file=- when stdin is a terminal
+
+### CI/CD
+
+- Pass release version input through env
+- Standardize dependabot config
+- Standardize tests workflow
+- Remove run-tests.yml (replaced by tests.yml)
+- Standardize tests workflow
+- Auto-merge dependabot github-actions minor/patch
+
+### Dependencies
+
+- **deps:** Bump orhun/git-cliff-action from 4.8.0 to 4.9.0
+- **deps:** Bump orhun/git-cliff-action in the actions-deps group
+
+### Documentation
+
+- Point tests badge to tests.yml
+
 ## [1.3.2] - 2026-09-08
 
 ### Bug Fixes
