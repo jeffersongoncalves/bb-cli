@@ -94,6 +94,10 @@ class CreateCommand extends Command
             return null;
         }
 
+        if ($path === '-' && stream_isatty(STDIN)) {
+            throw new RuntimeException('--description-file=- expects piped stdin, not a terminal.');
+        }
+
         $contents = $path === '-' ? stream_get_contents(STDIN) : @file_get_contents($path);
 
         if ($contents === false) {
