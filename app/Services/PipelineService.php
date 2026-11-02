@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\Pipeline;
+use Illuminate\Support\Sleep;
 
 class PipelineService
 {
@@ -41,7 +42,7 @@ class PipelineService
                 return $pipeline;
             }
 
-            sleep(2);
+            Sleep::for(2)->seconds();
         }
     }
 

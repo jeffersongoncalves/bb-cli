@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Sleep;
 use Tests\TestCase;
 
-uses(TestCase::class)->in('Feature', 'Unit');
+// Pipeline polling waits via Sleep — never really sleep in tests.
+uses(TestCase::class)->beforeEach(fn () => Sleep::fake())->in('Feature', 'Unit');
