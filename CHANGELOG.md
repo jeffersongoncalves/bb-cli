@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2026-11-04
+
+### Dependencies
+
+- **deps:** Bump shivammathur/setup-php (#20)
+- **deps:** Bump stefanzweifel/git-auto-commit-action (#22)
+
+### Miscellaneous Tasks
+
+- **deps-dev:** Bump the composer-deps group with 10 updates
+- **deps-dev:** Bump league/flysystem from 3.31.0 to 3.36.0
+- Upgrade to Laravel Zero 13
+
+### Other
+
+- Auto-assign issues and pull requests
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+### Refactor
+
+- Poll pipelines via Sleep facade so tests never really sleep
+
 ## [1.4.0] - 2026-10-13
 
 ### Bug Fixes
